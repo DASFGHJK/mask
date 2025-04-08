@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>豆瓣读书数据可视化</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>柱状图</h1>
+    <div id="bar" style="width:100%;height:500px;"></div>
+    <script>
+        var bar_graph_json = {{ bar_graph_json|safe }};
+        Plotly.newPlot('bar', bar_graph_json.data, bar_graph_json.layout);
+    </script>
+
+    <h1>饼状图</h1>
+    <div id="pie" style="width:100%;height:500px;"></div>
+    <script>
+        var pie_graph_json = {{ pie_graph_json|safe }};
+        Plotly.newPlot('pie', pie_graph_json.data, pie_graph_json.layout);
+    </script>
+
+    <h1>折线图</h1>
+    <div id="line" style="width:100%;height:500px;"></div>
+    <script>
+        var line_graph_json = {{ line_graph_json|safe }};
+        Plotly.newPlot('line', line_graph_json.data, line_graph_json.layout);
+    </script>
+
+    <h1>漏斗图</h1>
+    <div>{{ funnel_html|safe }}</div>
+
+    <h1>词云</h1>
+    <img src="data:image/png;base64,{{ wordcloud_url }}" alt="Word Cloud">
+
+    <h1>雷达图</h1>
+    <div>{{ radar_html|safe }}</div>
+</body>
+</html>

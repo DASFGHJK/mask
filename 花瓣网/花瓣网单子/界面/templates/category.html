@@ -1,0 +1,16 @@
+<!-- category.html -->
+{% extends "layout.html" %}
+{% block content %}
+<h1>{{ keyword }} Images</h1>
+<div class="gallery">
+    {% for image in images %}
+    <div class="image-card">
+        <img src="{{ image.image_url }}" alt="{{ keyword }} image">
+        <p>Uploaded at: {{ image.created_at }}</p>
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        <a href="{{ url_for('delete_image', id=image.id) }}">Delete</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
