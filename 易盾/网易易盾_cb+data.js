@@ -1,5 +1,5 @@
 window = global;
-xproxyObjs = ['window', 'document', 'location', 'navigator', 'history', 'screen', 'Object']
+
 window.CanvasRenderingContext2D = function () {
     return "function CanvasRenderingContext2D() { [native code] }"
 }
@@ -34,7 +34,7 @@ var _f3;
 var _y;
 var _ff;
 var _G;
-
+xproxyObjs = ['window', 'document', 'location', 'navigator', 'history', 'screen', 'Object']
 function getEnvs(proxyObjs) {
     for (let i = 0; i < proxyObjs.length; i++) {
         const handler = `{

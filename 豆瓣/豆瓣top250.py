@@ -3,11 +3,23 @@ import requests
 from lxml import etree
 import csv
 import time
+import logging
+
+# 配置日志系统
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('douban_spider.log'),
+        logging.StreamHandler()
+    ]
+)
+
+# ANSI 转义码用于设置红色
+RED = "\033[91m"
+RESET = "\033[0m"
 
 # 请求头信息
-import requests
-
-
 headers = {
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
     "accept-language": "zh-CN,zh;q=0.9",
@@ -50,13 +62,13 @@ cookies = {
 movie_list = []
 
 for page in range(1, 11):
-    print(f'正在抓取第{page}页代-------------------')
+    logging.info(f'{RED}正在抓取第{page}页-------------------{RESET}')
     # 目标url
     url = f'https://movie.douban.com/top250?start={(page - 1) * 25}&filter='
 
     try:
         # 发送请求，增加异常处理
-        res = requests.get(url, headers=headers,cookies=cookies, timeout=10)
+        res = requests.get(url, headers=headers, cookies=cookies, timeout=10)
         res.raise_for_status()
 
         # 实例化etree对象
@@ -85,11 +97,10 @@ for page in range(1, 11):
 
                 # 电影简介（短评）
                 quote = div.xpath("./div/p[@class='quote']/span/text()")
-                print(quote)
                 dic['简介'] = quote[0].strip() if quote else '暂无'
 
             except Exception as e:
-                print(f"详情页请求失败：{str(e)}")
+                logging.error(f'{RED}详情页请求失败：{str(e)}{RESET}')
                 dic['剧情详情'] = '获取失败'
                 dic['简介'] = '获取失败'
 
@@ -113,14 +124,23 @@ for page in range(1, 11):
             dic['评分'] = div.xpath('./div[@class="bd"]/div/span[2]/text()')[0]
             dic['评分人数'] = div.xpath('./div[@class="bd"]/div/span[4]/text()')[0]
 
+            # 记录电影信息
+            logging.error(f'actors: {dic["主演"]}{RESET}')
+            logging.error(f'detail_score: {dic["评分"]}{RESET}')
+            logging.error(f'detail_url: {dic["详情页链接"]}{RESET}')
+            logging.error(f'director: {dic["导演"]}{RESET}')
+            logging.error(f'release_date: {dic["上映年份"]}{RESET}')
+            logging.error(f'synopsis: {dic["剧情详情"]}{RESET}')
+            logging.error(f'title: {dic["电影中文名"]}{RESET}')
+
             movie_list.append(dic)
             time.sleep(1)  # 增加请求间隔
 
-        print(f'第{page}/10页爬取完成')
+        logging.info(f'{RED}第{page}/10页爬取完成{RESET}')
         time.sleep(2)  # 页间延迟
 
     except requests.exceptions.RequestException as e:
-        print(f"请求异常：{str(e)}")
+        logging.error(f'{RED}请求异常：{str(e)}{RESET}')
         continue
 
 # 数据保存
@@ -132,4 +152,4 @@ with open('豆瓣电影Top250.csv', 'w', encoding='utf-8-sig', newline='') as f:
     writer.writeheader()
     writer.writerows(movie_list)
 
-print('爬虫执行完毕，共爬取', len(movie_list), '条数据')
+logging.info(f'{RED}爬虫执行完毕，共爬取 {len(movie_list)} 条数据{RESET}')
