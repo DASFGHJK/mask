@@ -2,12 +2,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib
+
 matplotlib.use('tkagg')
 plt.rcParams['font.family'] = 'Heiti TC'  # 尝试繁体中文黑体
 # plt.rcParams['font.sans-serif'] = ['SimHei']  # 设置中文显示
-plt.rcParams['axes.unicode_minus'] = False    # 解决负号显示问题
-
-
+plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
 
 # 读取Excel文件
 file_path = '中国石油数据(1).xlsx'
@@ -113,11 +112,13 @@ wedges_inner, texts_inner, autotexts_inner = ax.pie(
     radius=1.0,
     colors=inner_colors[:len(category_counts)],
     wedgeprops=dict(width=0.3, edgecolor='w'),
-    textprops={'color':'white'}  # 内环文字颜色
+    textprops={'color': 'white'}  # 内环文字颜色
 )
 
+# 添加内环标签
+plt.setp(texts_inner, size=12, weight="bold", color='white')
+
 # 添加图例
-# 添加图例（最终正确版本）
 plt.legend(handles=wedges_outer,
            labels=title_counts.index.tolist(),  # 关键修改点：Index -> list
            title="具体职称",
@@ -125,7 +126,8 @@ plt.legend(handles=wedges_outer,
            bbox_to_anchor=(1, 0.2, 0.5, 0.8))
 
 # 调整标题位置避免重叠
-plt.title('职称分布（外环：具体职称 | 内环：大类分布）', y=1.05)  # 提升标题位置
+plt.title('职称分布（外环：教育机构 | 内环：职位机构'
+          '  1q）', y=1.05)  # 提升标题位置
 
 plt.savefig('职称分布.png', dpi=300, bbox_inches='tight')  # 新增在show()之前
 # 调整标签位置
@@ -133,4 +135,3 @@ plt.setp(autotexts_outer, size=8, weight="bold", color='white')
 plt.setp(autotexts_inner, size=12, weight="bold")
 
 plt.show()
-

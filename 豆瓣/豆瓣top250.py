@@ -4,7 +4,8 @@ from lxml import etree
 import csv
 import time
 import logging
-
+from bs4 import BeautifulSoup
+import re
 # 配置日志系统
 logging.basicConfig(
     level=logging.INFO,
@@ -94,8 +95,12 @@ for page in range(1, 11):
                 # 剧情详情
                 plot = detail_tree.xpath("//div[@class='related-info']/div[@id='link-report-intra']/span/text()")
                 dic['剧情详情'] = ''.join(plot).strip().replace('\n', '') if plot else '暂无'
-
+                dic['编剧']=','.join(detail_tree.xpath("//div[@id='info']/span[2]/span[@class='attrs']/a/text()"))
+                dic['语言']=re.findall('<span class="pl">语言:</span>(.*?)<br/>',detail_res.text)[0]
+                dic['时长']=detail_tree.xpath("//div[@class='subjectwrap clearfix']/div[@class='subject clearfix']/div[@id='info']/span[13]/text()")[0]
+                dic['又名']=re.findall(' <span class="pl">又名:</span>(.*?)<br/>',detail_res.text)[0]
                 # 电影简介（短评）
+                dic['上映日期']=re.findall('<span class="pl">上映日期:</span> <span property="v:initialReleaseDate" content=(.*?)</span>',detail_res.text)[0]
                 quote = div.xpath("./div/p[@class='quote']/span/text()")
                 dic['简介'] = quote[0].strip() if quote else '暂无'
 
