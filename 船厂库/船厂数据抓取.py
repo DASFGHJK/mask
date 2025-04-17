@@ -70,7 +70,7 @@ def parse_data(response):
         raise RuntimeError(f"数据解析失败: {str(e)}")
 
 
-def save_to_txt(data, filename="company_info.txt"):
+def save_to_txt(data, filename="船场数据.txt"):
     """封装存储逻辑（支持增量保存）"""
     try:
         with open(filename, 'w', encoding='utf-8') as f:

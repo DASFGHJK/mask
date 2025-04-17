@@ -51,10 +51,10 @@ filtered_words = [word for word in words.split() if word not in stopwords and le
 
 # 创建词云对象
 # 动态获取支持中文的字体路径
-if os.path.exists(r'C:\Windows\Fonts\msyh.ttc'):  # Windows系统常用字体（微软雅黑）
-    font_path = r'C:\Windows\Fonts\msyh.ttc'
-elif os.path.exists(r'C:\Windows\Fonts\simsun.ttc'):  # 另一种常见字体（宋体）
-    font_path = r'C:\Windows\Fonts\simsun.ttc'
+if os.path.exists('/System/Library/Fonts/PingFang.ttc'):  # Mac系统常用字体
+    font_path = '/System/Library/Fonts/PingFang.ttc'
+elif os.path.exists('/Library/Fonts/Songti.ttc'):  # 另一种常见字体
+    font_path = '/Library/Fonts/Songti.ttc'
 else:
     raise FileNotFoundError("未找到支持中文的字体，请手动指定字体路径")
 
@@ -76,4 +76,24 @@ plt.title('评论词云图')
 plt.rcParams['font.sans-serif'] = ['SimHei', 'Arial Unicode MS']
 plt.rcParams['axes.unicode_minus'] = False
 
+plt.show()
+
+df['时间'] = pd.to_datetime(df['时间'])
+
+# 按 15 天为一个节点统计评论量
+df.set_index('时间', inplace=True)  # 将 '时间' 列设置为索引
+comment_counts_15d = df.resample('15D').size()
+
+# 绘制折线图
+plt.figure(figsize=(10, 6))
+plt.plot(comment_counts_15d.index, comment_counts_15d.values, marker='o')
+plt.title('每15天评论量变化趋势')
+plt.xlabel('日期')
+plt.ylabel('评论量')
+plt.grid(True)
+
+# 旋转 x 轴标签以便更好地显示
+plt.xticks(rotation=45)
+
+plt.tight_layout()  # 自动调整子图参数，使之填充整个图像区域
 plt.show()

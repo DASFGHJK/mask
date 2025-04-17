@@ -3,8 +3,6 @@ import re
 import requests
 import time
 from lxml import etree
-
-
 class HenanDailyScraper:
     def __init__(self):
         self.headers = {
