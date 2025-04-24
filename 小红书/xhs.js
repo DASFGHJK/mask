@@ -1,7 +1,6 @@
 require('./x-s&mns通杀')
 require('./source')
 f = window._webmsxyw
-p="/api/sns/web/v1/homefeed"
 u={
     "cursor_score": "",
     "num": 35,
@@ -20,7 +19,10 @@ u={
     ],
     "need_filter_image": false
 }
+function get_data(u) {
+    p="/api/sns/web/v1/homefeed"
 
-var v = f(p, u)
+    var v = f(p, u)
+    return v
+}
 
-console.log(v['X-s'])

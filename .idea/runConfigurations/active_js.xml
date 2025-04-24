@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="active.js" type="NodeJSConfigurationType" path-to-node="/usr/local/bin/node" nameIsGenerated="true" path-to-js-file="active.js" working-dir="$PROJECT_DIR$/今日头条/最新分析">
+    <method v="2" />
+  </configuration>
+</component>
